@@ -11,20 +11,22 @@
         android:layout_height="180dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
         app:srcCompat="@drawable/sport_basketball" />
 
     <TextView
         android:id="@+id/show_event_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
         android:text="Назва події"
-        android:textColor="@color/white"
+        android:textColor="@color/purple_700"
         android:textSize="30sp"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/show_event_image" />
 
 
     <TextView
@@ -35,10 +37,10 @@
         android:text="Опис"
         android:textColor="@color/black"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="10dp"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/show_event_image" />
+        app:layout_constraintTop_toBottomOf="@+id/show_event_name" />
 
     <ListView
         android:id="@+id/show_event_members_list"

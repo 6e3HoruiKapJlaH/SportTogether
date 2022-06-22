@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +42,7 @@ public class ShowEventActivity extends AppCompatActivity {
     TextView eventDescription;
     Button button;
     ButtonType btnType;
+    ImageView image;
 
     enum ButtonType{
         MEMBER,
@@ -57,9 +59,26 @@ public class ShowEventActivity extends AppCompatActivity {
 
         eventName = findViewById(R.id.show_event_name);
         eventDescription= findViewById(R.id.show_event_description);
+        image = findViewById(R.id.show_event_image);
         eventName.setText(event.getName());
         eventDescription.setText(event.getDescription());
-
+        switch (event.getSport()){
+            case "⚽ Футбол":
+                image.setImageResource(R.drawable.sport_football);
+                break;
+            case "\uD83C\uDFC0 Баскетбол":
+                image.setImageResource(R.drawable.sport_basketball);
+                break;
+            case "\uD83C\uDFD0 Волейбол":
+                image.setImageResource(R.drawable.sport_volleyball);
+                break;
+            case "\uD83C\uDFBE Теніс":
+                image.setImageResource(R.drawable.sport_tenis);
+                break;
+            case "\uD83E\uDD4A Бокс":
+                image.setImageResource(R.drawable.sport_box);
+                break;
+        }
         button = findViewById(R.id.show_event_button);
 
         ArrayList<User> members = event.getMembers();

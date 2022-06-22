@@ -24,10 +24,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "API_URL", "\"https://30c4-46-96-181-177.eu.ngrok.io/api/\""
+            buildConfigField "String", "API_URL", "\"https://0749-91-225-140-204.eu.ngrok.io/api/\""
         }
         debug{
-            buildConfigField "String", "API_URL", "\"https://30c4-46-96-181-177.eu.ngrok.io/api/\""
+            buildConfigField "String", "API_URL", "\"https://0749-91-225-140-204.eu.ngrok.io/api/\""
         }
     }
     compileOptions {

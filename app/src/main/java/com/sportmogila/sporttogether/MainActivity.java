@@ -51,10 +51,8 @@ public class MainActivity extends AppCompatActivity {
 
     ViewPager viewPager;
     ViewPagerAdapter viewPagerAdapter;
-    TabLayout tabLayout;
     BottomNavigationView bottomNavigationView;
-
-    Fragment selectedFragment = null;
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -105,14 +103,6 @@ public class MainActivity extends AppCompatActivity {
                 switch (position) {
                     case 0:
                         bottomNavigationView.getMenu().findItem(R.id.menu_all_events).setChecked(true);
-                        SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.refresh_all_events);
-                        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                            @Override
-                            public void onRefresh() {
-                                showEvents();
-                                swipeRefreshLayout.setRefreshing(false);
-                            }
-                        });
                         showEvents();
                         break;
                     case 1:
@@ -132,15 +122,14 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-
     }
+
     //CREATE EVENT PAGE
     public void createEventPage(){
 
         //APPEND SPORT TYPES TO THE SELECT SPORT INPUT
         String[] sportArray = getResources().getStringArray(R.array.sport_types);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(MainActivity.this,R.layout.dropdown_sport_type,sportArray);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(MainActivity.this, R.layout.dropdown_sport_type, sportArray);
         AutoCompleteTextView actView = findViewById(R.id.add_event_sport_list);
         actView.setAdapter(arrayAdapter);
         bottomNavigationView.getMenu().findItem(R.id.menu_add_event).setChecked(true);
@@ -186,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<ArrayList<Event>> call, @NonNull Response<ArrayList<Event>> response) {
                 if(response.code()==200){
                     ArrayList<Event> events = response.body();
+                    System.out.println(events);
                     ListView allEventsList = (ListView) findViewById(R.id.all_events_list);
                     AllEventsAdapter adapter= new AllEventsAdapter(events,getApplicationContext());
                     allEventsList.setAdapter(adapter);
