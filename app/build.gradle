@@ -16,21 +16,26 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "API_URL", "\"https://0f2f-91-225-140-175.eu.ngrok.io/api/\""
+            buildConfigField "String", "API_URL", "\"https://30c4-46-96-181-177.eu.ngrok.io/api/\""
         }
         debug{
-            buildConfigField "String", "API_URL", "\"https://0f2f-91-225-140-175.eu.ngrok.io/api/\""
+            buildConfigField "String", "API_URL", "\"https://30c4-46-96-181-177.eu.ngrok.io/api/\""
         }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildFeatures {
+        viewBinding true
     }
 }
 
@@ -42,6 +47,8 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
     //implementation 'com.google.android.gms:play-services-auth:18.1.0'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

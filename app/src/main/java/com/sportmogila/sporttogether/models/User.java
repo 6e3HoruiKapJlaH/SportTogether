@@ -3,6 +3,7 @@ package com.sportmogila.sporttogether.models;
 import android.net.Uri;
 
 public class User {
+    private Integer id;
     private String name;
     private String email;
     private String photo_url;
@@ -19,6 +20,10 @@ public class User {
         this.name = name;
         this.email = email;
         this.photo_url = photo_url;
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     public String getName() {

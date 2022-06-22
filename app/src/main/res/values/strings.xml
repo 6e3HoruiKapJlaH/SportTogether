@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">SportTogether</string>
+    <string name="signin">Увійти</string>
+    <string name="menu_all_events">Усі події</string>
+    <string name="menu_my_events">Мої події</string>
+    <string name="menu_add_event">Створити</string>
+    <string name="menu_account">Акаунт</string>
+    
+    
+    <string-array name="sport_types">
+        <item>⚽ Футбол</item>
+        <item>🏀 Баскетбол</item>
+        <item>🏐 Волейбол</item>
+        <item>🎾 Теніс</item>
+        <item>🥊 Бокс</item>
+    </string-array>
 </resources>

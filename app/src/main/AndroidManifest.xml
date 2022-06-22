@@ -12,7 +12,7 @@
         android:theme="@style/Theme.SportTogether">
         <activity
             android:exported="true"
-            android:name=".MainActivity">
+            android:name=".LoginActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,7 +22,7 @@
         </activity>
         <activity
             android:exported="true"
-            android:name=".SecondActivity">
+            android:name=".MainActivity">
 
         </activity>
 

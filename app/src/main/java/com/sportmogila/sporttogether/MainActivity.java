@@ -1,26 +1,40 @@
 package com.sportmogila.sporttogether;
 
-
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
-import android.content.Context;
+import android.annotation.SuppressLint;
+import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.button.MaterialButton;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
-import com.sportmogila.sporttogether.controllers.Authorization;
+import com.sportmogila.sporttogether.models.Event;
+import com.sportmogila.sporttogether.models.Location;
 import com.sportmogila.sporttogether.models.User;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,93 +43,189 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
-
     GoogleSignInOptions gso;
     GoogleSignInClient gsc;
-    MaterialButton googleBtn;
+
     User user;
 
+    ViewPager viewPager;
+    ViewPagerAdapter viewPagerAdapter;
+    TabLayout tabLayout;
+    BottomNavigationView bottomNavigationView;
+
+    Fragment selectedFragment = null;
+
+    @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getSupportActionBar().hide();
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.main_activity);
+        showEvents();
+
         SharedPreferences sh = getSharedPreferences("MySharedPref", MODE_PRIVATE);
         String jsonUser = sh.getString("user", "");
-        if(jsonUser.equals("")){
-            setContentView(R.layout.activity_main);
-        }
-        else{
-            openMainActivity();
-        }
+        System.out.println(jsonUser);
+        user = new Gson().fromJson(jsonUser,User.class);
 
+        viewPager = findViewById(R.id.view_pager);
+        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        googleBtn = findViewById(R.id.google_btn);
+        viewPager.setAdapter(viewPagerAdapter);
 
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-        gsc = GoogleSignIn.getClient(this,gso);
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            Fragment selectedFragment = null;
 
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
-
-        if(acct!=null){
-            String photo_url = "none";
-            if(acct.getPhotoUrl()!=null){
-                photo_url = acct.getPhotoUrl().toString();
+            switch (item.getItemId()){
+                case R.id.menu_all_events:
+                    viewPager.setCurrentItem(0);
+                    return true;
+                case R.id.menu_my_events:
+                    viewPager.setCurrentItem(1);
+                    return true;
+                case R.id.menu_add_event:
+                    viewPager.setCurrentItem(2);
+                    return true;
+                case R.id.menu_account:
+                    viewPager.setCurrentItem(3);
+                    return true;
             }
-            this.user = new User(acct.getDisplayName(),acct.getEmail(),photo_url,acct.getId());
-        }
+            return true;
+        });
 
-        googleBtn.setOnClickListener(v -> {
-            Intent signInIntent = gsc.getSignInIntent();
-            startActivityForResult(signInIntent,007);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position) {
+                    case 0:
+                        bottomNavigationView.getMenu().findItem(R.id.menu_all_events).setChecked(true);
+                        showEvents();
+                        break;
+                    case 1:
+                        bottomNavigationView.getMenu().findItem(R.id.menu_my_events).setChecked(true);
+                        break;
+                    case 2:
+                        createEventPage();
+                        break;
+                    case 3:
+                        bottomNavigationView.getMenu().findItem(R.id.menu_account).setChecked(true);
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+    }
+
+
+    //CREATE EVENT PAGE
+    public void createEventPage(){
+
+        //APPEND SPORT TYPES TO THE SELECT SPORT INPUT
+        String[] sportArray = getResources().getStringArray(R.array.sport_types);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(MainActivity.this,R.layout.dropdown_sport_type,sportArray);
+        AutoCompleteTextView actView = findViewById(R.id.add_event_sport_list);
+        actView.setAdapter(arrayAdapter);
+        bottomNavigationView.getMenu().findItem(R.id.menu_add_event).setChecked(true);
+
+        //CLICK CREATE BUTTON
+        Button createEventButton = findViewById(R.id.add_event_button);
+        createEventButton.setOnClickListener(v -> {
+            EditText name = findViewById(R.id.add_event_name);
+            EditText description = findViewById(R.id.add_event_description);
+            TextInputLayout sport = findViewById(R.id.add_event_sport);
+            String event_at = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
+            Location location = new Location("Україна","Київ",41.40338,2.17403);
+            Event event = new Event(name.getText().toString(),description.getText().toString(),sport.getEditText().getText().toString(),
+                    user,location,event_at);
+            if(validateCreateEventForm(event)){
+                createEvent(event);
+            }
         });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode,Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 007){
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-
-            try {
-                task.getResult(ApiException.class);
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(BuildConfig.API_URL)
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-                RetrofitAPI retrofitAPI = retrofit.create(RetrofitAPI.class);
-                Call<User> call = retrofitAPI.authUser(user);
-                System.out.println(user);
-                call.enqueue(new Callback<User>() {
-                    @Override
-                    public void onResponse(Call<User> call, Response<User> response) {
-                        if(response.code()==200){
-                            User user = response.body();
-                            SharedPreferences sharedPreferences = getSharedPreferences("MySharedPref",MODE_PRIVATE);
-                            SharedPreferences.Editor myEdit = sharedPreferences.edit();
-                            Gson gson = new Gson();
-                            myEdit.putString("user", gson.toJson(user));
-                            myEdit.apply();
-                            openMainActivity();
-                        }
-                        else{
-                            Toast.makeText(getApplicationContext(), "Помилка сервера", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<User> call, Throwable t) {
-                        System.out.println("ERROR "+t.getMessage());
-                    }
-                });
-            } catch (ApiException e) {
-                Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
-            }
+    public boolean validateCreateEventForm(Event event){
+        if(event.getName().equals("")){
+            return false;
         }
+        if(event.getDescription().equals("")){
+            return false;
+        }
+        if(event.getSport().equals("")){
+            return false;
+        }
+        return true;
+    }
 
+    public void showEvents(){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BuildConfig.API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        RetrofitAPI retrofitAPI = retrofit.create(RetrofitAPI.class);
+        Call<ArrayList<Event>> call = retrofitAPI.getEvents();
+        call.enqueue(new Callback<ArrayList<Event>>() {
+            @Override
+            public void onResponse(@NonNull Call<ArrayList<Event>> call, @NonNull Response<ArrayList<Event>> response) {
+                if(response.code()==200){
+                    ArrayList<Event> events = response.body();
+                    ListView allEventsList = (ListView) findViewById(R.id.all_events_list);
+                    AllEventsAdapter adapter= new AllEventsAdapter(events,getApplicationContext());
+                    allEventsList.setAdapter(adapter);
+                    allEventsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            Event event = events.get(i);
+                            System.out.println(event.getName());
+                        }
+                    });
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "Помилка завантаження подій", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ArrayList<Event>> call, @NonNull Throwable t) {
+                System.out.println("ERROR "+t.getMessage());
+            }
+        });
     }
-    void openMainActivity(){
-        finish();
-        Intent intent = new Intent(MainActivity.this,SecondActivity.class);
-        startActivity(intent);
+
+    public void createEvent(Event event){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BuildConfig.API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        RetrofitAPI retrofitAPI = retrofit.create(RetrofitAPI.class);
+        Call<Event> call = retrofitAPI.createEvent(event);
+        call.enqueue(new Callback<Event>() {
+            @Override
+            public void onResponse(Call<Event> call, Response<Event> response) {
+                if(response.code()==200){
+                    Event event = response.body();
+                    Toast.makeText(getApplicationContext(), "Подію успішно створено", Toast.LENGTH_SHORT).show();
+                    viewPager.setCurrentItem(1);
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "Помилка сервера", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Event> call, Throwable t) {
+                System.out.println("ERROR "+t.getMessage());
+            }
+        });
     }
+
 }

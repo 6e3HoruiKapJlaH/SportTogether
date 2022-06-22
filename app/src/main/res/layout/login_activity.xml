@@ -5,22 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/main_background"
-    tools:context=".MainActivity">
-    <!--
-    <TextView
-        android:id="@+id/signin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="50dp"
-        android:fontFamily="@font/merriweather"
-        android:gravity="center"
-        android:text="Sport Together"
-        android:textColor="@color/white"
-        android:textSize="35dp"
-        android:textStyle="bold" />-->
+    tools:context=".LoginActivity">
 
     <LinearLayout
         android:id="@+id/socialicons"
@@ -43,9 +28,10 @@
             android:backgroundTint="@color/white"
             android:drawableLeft="@drawable/googleg_standard_color_18"
             android:textColor="@color/black"
-            android:text="Увійти" />
+            android:text="@string/signin" />
 
     </LinearLayout>
+
 
 
 </RelativeLayout>
