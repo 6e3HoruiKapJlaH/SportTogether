@@ -25,6 +25,11 @@
             android:name=".MainActivity">
 
         </activity>
+        <activity
+            android:exported="true"
+            android:name=".ShowEventActivity">
+
+        </activity>
 
     </application>
 

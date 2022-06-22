@@ -2,6 +2,7 @@ package com.sportmogila.sporttogether;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import android.annotation.SuppressLint;
@@ -104,6 +105,14 @@ public class MainActivity extends AppCompatActivity {
                 switch (position) {
                     case 0:
                         bottomNavigationView.getMenu().findItem(R.id.menu_all_events).setChecked(true);
+                        SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.refresh_all_events);
+                        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                            @Override
+                            public void onRefresh() {
+                                showEvents();
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
+                        });
                         showEvents();
                         break;
                     case 1:
@@ -124,9 +133,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
     }
-
-
     //CREATE EVENT PAGE
     public void createEventPage(){
 
@@ -185,7 +193,9 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                             Event event = events.get(i);
-                            System.out.println(event.getName());
+                            Intent intent = new Intent(MainActivity.this, ShowEventActivity.class);
+                            intent.putExtra("event", event);
+                            startActivity(intent);
                         }
                     });
                 }

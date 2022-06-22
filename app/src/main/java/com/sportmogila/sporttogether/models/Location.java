@@ -1,8 +1,9 @@
 package com.sportmogila.sporttogether.models;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Location {
+public class Location implements Serializable {
     private String country;
     private String city;
     private Double map_x;

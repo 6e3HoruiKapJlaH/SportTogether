@@ -1,9 +1,10 @@
 package com.sportmogila.sporttogether.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class Event {
+public class Event implements Serializable {
     private Integer id;
     private String name;
     private String description;

@@ -50,21 +50,25 @@ public class LoginActivity extends AppCompatActivity {
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
 
         if(acct!=null){
-            String photo_url = "none";
+            String photo_url = "";
             if(acct.getPhotoUrl()!=null){
                 photo_url = acct.getPhotoUrl().toString();
             }
             this.user = new User(acct.getDisplayName(),acct.getEmail(),photo_url,acct.getId());
         }
         googleBtn = findViewById(R.id.google_btn);
-        googleBtn.setOnClickListener(v -> {
-            Intent signInIntent = gsc.getSignInIntent();
-            startActivityForResult(signInIntent,007);
-        });
+        if(googleBtn!=null){
+            googleBtn.setOnClickListener(v -> {
+                Intent signInIntent = gsc.getSignInIntent();
+                startActivityForResult(signInIntent,007);
+            });
+        }
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode,Intent data) {
+        System.out.println("LOGGED IN");
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 007){
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -76,8 +80,18 @@ public class LoginActivity extends AppCompatActivity {
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
                 RetrofitAPI retrofitAPI = retrofit.create(RetrofitAPI.class);
+                if(user==null){
+                    GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
+
+                    if(acct!=null){
+                        String photo_url = "";
+                        if(acct.getPhotoUrl()!=null){
+                            photo_url = acct.getPhotoUrl().toString();
+                        }
+                        this.user = new User(acct.getDisplayName(),acct.getEmail(),photo_url,acct.getId());
+                    }
+                }
                 Call<User> call = retrofitAPI.authUser(user);
-                System.out.println(user);
                 call.enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {

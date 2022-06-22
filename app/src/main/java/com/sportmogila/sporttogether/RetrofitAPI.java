@@ -5,11 +5,14 @@ import com.sportmogila.sporttogether.models.User;
 
 import java.util.ArrayList;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface RetrofitAPI {
 
@@ -25,4 +28,18 @@ public interface RetrofitAPI {
     //Create new event
     @POST("events")
     Call<Event> createEvent(@Body Event event);
+
+    //Join to the event
+    @POST("events/{id}/join")
+    Call<ResponseBody> joinEvent(
+            @Path("id") int id,
+            @Body User user
+    );
+
+    //Leave the event
+    @POST("events/{id}/leave")
+    Call<ResponseBody> leaveEvent(
+            @Path("id") int id,
+            @Body User user
+    );
 }
