@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_search"
+        android:title="Search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="always|collapseActionView" />
+
+    <item
+        android:icon="@drawable/ic_sort"
+        android:title="Sort"
+        app:showAsAction="always">
+
+        <menu>
+
+            <item
+                android:id="@+id/action_sort_by_name"
+                android:title="Sort by name" />
+
+            <item
+                android:id="@+id/action_sort_by_date_created"
+                android:title="Sort by date created" />
+
+        </menu>
+
+    </item>
+    <item
+        android:icon="@drawable/ic_filter"
+        android:title="Filter"
+        app:showAsAction="always">
+
+        <menu>
+
+            <item
+                android:id="@+id/action_filter_by_members"
+                android:title="Filter by members" />
+
+            <item
+                android:id="@+id/action_filter_by_sport"
+                android:title="Filter by sports" >
+                <menu>
+
+                    <item
+                        android:id="@+id/action_filter_by_sport_basketball"
+                        android:title="Basketball 🏀" />
+
+                    <item
+                        android:id="@+id/action_filter_by_sport_football"
+                        android:title="Football ⚽" >
+
+                    </item>
+                </menu>
+            </item>
+        </menu>
+
+    </item>
+
+
+</menu>

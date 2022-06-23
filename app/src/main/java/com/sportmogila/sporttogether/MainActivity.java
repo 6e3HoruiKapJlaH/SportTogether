@@ -1,15 +1,25 @@
 package com.sportmogila.sporttogether;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.DragEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -27,6 +37,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
+import com.mapbox.maps.MapView;
+import com.mapbox.maps.MapboxMap;
+import com.mapbox.maps.Style;
+import com.mapbox.maps.extension.observable.eventdata.CameraChangedEventData;
+import com.mapbox.maps.plugin.delegates.listeners.OnCameraChangeListener;
 import com.sportmogila.sporttogether.models.Event;
 import com.sportmogila.sporttogether.models.Location;
 import com.sportmogila.sporttogether.models.User;
@@ -44,15 +59,13 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
-    GoogleSignInOptions gso;
-    GoogleSignInClient gsc;
-
     User user;
 
     ViewPager viewPager;
     ViewPagerAdapter viewPagerAdapter;
     BottomNavigationView bottomNavigationView;
-    SwipeRefreshLayout swipeRefreshLayout;
+
+    Location location;
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -73,8 +86,6 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
-            Fragment selectedFragment = null;
-
             switch (item.getItemId()){
                 case R.id.menu_all_events:
                     viewPager.setCurrentItem(0);
@@ -98,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
 
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onPageSelected(int position) {
                 switch (position) {
@@ -125,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //CREATE EVENT PAGE
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void createEventPage(){
 
         //APPEND SPORT TYPES TO THE SELECT SPORT INPUT
@@ -134,6 +147,17 @@ public class MainActivity extends AppCompatActivity {
         actView.setAdapter(arrayAdapter);
         bottomNavigationView.getMenu().findItem(R.id.menu_add_event).setChecked(true);
 
+
+        //MAP
+        Button mapButton = findViewById(R.id.add_event_open_map);
+        mapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, MapActivity.class);
+                intent.putExtra("location",location);
+                startActivityForResult(intent,777);
+            }
+        });
         //CLICK CREATE BUTTON
         Button createEventButton = findViewById(R.id.add_event_button);
         createEventButton.setOnClickListener(v -> {
@@ -141,13 +165,20 @@ public class MainActivity extends AppCompatActivity {
             EditText description = findViewById(R.id.add_event_description);
             TextInputLayout sport = findViewById(R.id.add_event_sport);
             String event_at = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
-            Location location = new Location("Україна","Київ",41.40338,2.17403);
             Event event = new Event(name.getText().toString(),description.getText().toString(),sport.getEditText().getText().toString(),
                     user,location,event_at);
             if(validateCreateEventForm(event)){
                 createEvent(event);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==777){
+            this.location = (Location) data.getSerializableExtra("location");
+        }
     }
 
     public boolean validateCreateEventForm(Event event){
@@ -158,6 +189,10 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
         if(event.getSport().equals("")){
+            return false;
+        }
+        System.out.println("VALIDATE "+location);
+        if(event.getLocation()==null){
             return false;
         }
         return true;
@@ -185,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
                             Event event = events.get(i);
                             Intent intent = new Intent(MainActivity.this, ShowEventActivity.class);
                             intent.putExtra("event", event);
-                            startActivity(intent);
+                            MainActivity.this.startActivityForResult(intent,777);
                         }
                     });
                 }
@@ -228,4 +263,20 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //FILTERS
+
+    private void filterByFootball() {
+        Toast.makeText(this, "Filtered by football ⚽️", Toast.LENGTH_SHORT).show();
+    }
+    private void filterByBasketball() {
+        Toast.makeText(this, "Filtered by basketball 🏀", Toast.LENGTH_SHORT).show();
+
+    }
+    private void sortByDate() {
+        Toast.makeText(this, "Sorted by date 📅", Toast.LENGTH_SHORT).show();
+
+    }
+    private void sortByName() {
+        Toast.makeText(this, "Sorted by name 🎫", Toast.LENGTH_SHORT).show();
+    }
 }

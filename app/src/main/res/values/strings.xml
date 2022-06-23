@@ -14,4 +14,6 @@
         <item>🎾 Теніс</item>
         <item>🥊 Бокс</item>
     </string-array>
+
+    <string name="mapbox_access_token">pk.eyJ1IjoidGhldml0aWsiLCJhIjoiY2w0cTY4ODIxMGgyZzNrczI5dWVzMGp0byJ9.oJD-i1X7uB6f37VJtj9oNg</string>
 </resources>

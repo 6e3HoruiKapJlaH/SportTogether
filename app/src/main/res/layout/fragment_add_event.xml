@@ -76,8 +76,8 @@
         android:id="@+id/add_event_datetime"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:layout_marginLeft="30dp"
+        android:layout_marginTop="24dp"
         android:layout_marginRight="30dp"
         android:ems="10"
         android:hint="Дата події"
@@ -88,13 +88,23 @@
         app:layout_constraintTop_toBottomOf="@+id/add_event_sport" />
 
     <Button
+        android:id="@+id/add_event_open_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="Відкрити карту"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_event_datetime" />
+
+    <Button
         android:id="@+id/add_event_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
-        android:layout_marginEnd="148dp"
         android:text="Створити"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_event_datetime" />
+        app:layout_constraintTop_toBottomOf="@+id/add_event_open_map" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
