@@ -40,6 +40,10 @@
         </activity>
         <activity
             android:exported="true"
+            android:name=".ShowCreatedEventActivity">
+        </activity>
+        <activity
+            android:exported="true"
             android:name=".MapActivity">
         </activity>
 

@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/show_event_image"
+        android:id="@+id/show_owner_event_image"
         android:layout_width="0dp"
         android:layout_height="180dp"
         android:adjustViewBounds="true"
@@ -16,7 +16,7 @@
         app:srcCompat="@drawable/sport_basketball" />
 
     <TextView
-        android:id="@+id/show_event_name"
+        android:id="@+id/show_owner_event_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
@@ -26,11 +26,11 @@
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/show_event_image" />
+        app:layout_constraintTop_toBottomOf="@+id/show_owner_event_image" />
 
 
     <TextView
-        android:id="@+id/show_event_description"
+        android:id="@+id/show_owner_event_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
@@ -39,20 +39,7 @@
         android:textColor="#8F8585"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/show_event_name" />
-
-    <TextView
-        android:id="@+id/tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="15dp"
-        android:text="Created by:"
-        android:textColor="#000000"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/show_event_description" />
+        app:layout_constraintTop_toBottomOf="@+id/show_owner_event_name" />
 
     <TextView
         android:id="@+id/tv1"
@@ -65,10 +52,10 @@
         android:textColor="#000000"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/show_event_creator" />
+        app:layout_constraintTop_toBottomOf="@+id/show_owner_event_description" />
 
     <ListView
-        android:id="@+id/show_event_members_list"
+        android:id="@+id/show_owner_event_members_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -76,36 +63,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv1" />
 
-    <ListView
-        android:id="@+id/show_event_creator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:padding="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv" />
-
     <Button
-        android:id="@+id/show_event_button"
+        android:id="@+id/show_owner_event_button"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
         android:layout_marginTop="-60dp"
-        android:text="Приєднатись"
+        android:text="Видалити"
         app:layout_constraintTop_toBottomOf="parent"
         tools:layout_editor_absoluteX="10dp" />
 
     <com.mapbox.maps.MapView
-        android:id="@+id/show_event_map"
+        android:id="@+id/show_owner_event_map"
         android:layout_width="match_parent"
         android:layout_height="180dp"
-        app:layout_constraintBottom_toTopOf="@+id/show_event_button"
+        app:layout_constraintBottom_toTopOf="@+id/show_owner_event_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:mapbox_cameraZoom="16.0"
         app:mapbox_cameraTargetLat="0"
         app:mapbox_cameraTargetLng="0"
-        app:layout_constraintTop_toBottomOf="@+id/show_event_members_list" />
+        app:layout_constraintTop_toBottomOf="@+id/show_owner_event_members_list" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

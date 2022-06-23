@@ -27,7 +27,7 @@ android {
             buildConfigField "String", "API_URL", "\"https://0749-91-225-140-204.eu.ngrok.io/api/\""
         }
         debug{
-            buildConfigField "String", "API_URL", "\"https://0749-91-225-140-204.eu.ngrok.io/api/\""
+            buildConfigField "String", "API_URL", "\"https://419a-91-225-140-204.eu.ngrok.io/api/\""
         }
     }
     compileOptions {
@@ -50,6 +50,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'com.mapbox.maps:android:10.6.0'
+    implementation 'com.appeaser.sublimepickerlibrary:sublimepickerlibrary:2.1.2'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'

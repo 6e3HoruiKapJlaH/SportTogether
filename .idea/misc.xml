@@ -5,6 +5,8 @@
       <map>
         <entry key="..\:/WORK/AndroidProjects/SportTogether/app/src/main/res/drawable/background.xml" value="0.1615" />
         <entry key="..\:/WORK/AndroidProjects/SportTogether/app/src/main/res/drawable/ic_baseline_cancel_24.xml" value="0.129" />
+        <entry key="..\:/WORK/AndroidProjects/SportTogether/app/src/main/res/drawable/ic_baseline_event_available_24.xml" value="0.129" />
+        <entry key="..\:/WORK/AndroidProjects/SportTogether/app/src/main/res/drawable/ic_baseline_event_note_24.xml" value="0.129" />
         <entry key="..\:/WORK/AndroidProjects/SportTogether/app/src/main/res/drawable/ic_baseline_info_24.xml" value="0.1875" />
         <entry key="..\:/WORK/AndroidProjects/SportTogether/app/src/main/res/drawable/ic_search.xml" value="0.1" />
         <entry key="..\:/WORK/AndroidProjects/SportTogether/app/src/main/res/drawable/ic_sort.xml" value="0.1" />
@@ -19,12 +21,14 @@
         <entry key="..\:/WORK/AndroidProjects/SportTogether/app/src/main/res/layout/fragment_add_event.xml" value="0.22" />
         <entry key="..\:/WORK/AndroidProjects/SportTogether/app/src/main/res/layout/fragment_all_events.xml" value="0.29985855728429983" />
         <entry key="..\:/WORK/AndroidProjects/SportTogether/app/src/main/res/layout/fragment_all_events_list.xml" value="0.1" />
-        <entry key="..\:/WORK/AndroidProjects/SportTogether/app/src/main/res/layout/fragment_my_events.xml" value="0.1" />
+        <entry key="..\:/WORK/AndroidProjects/SportTogether/app/src/main/res/layout/fragment_created_events.xml" value="0.18432971014492755" />
+        <entry key="..\:/WORK/AndroidProjects/SportTogether/app/src/main/res/layout/fragment_my_events.xml" value="0.25" />
         <entry key="..\:/WORK/AndroidProjects/SportTogether/app/src/main/res/layout/login_activity.xml" value="0.1" />
         <entry key="..\:/WORK/AndroidProjects/SportTogether/app/src/main/res/layout/main_activity.xml" value="0.25" />
         <entry key="..\:/WORK/AndroidProjects/SportTogether/app/src/main/res/layout/map_activity.xml" value="0.22" />
         <entry key="..\:/WORK/AndroidProjects/SportTogether/app/src/main/res/layout/members_list_item.xml" value="0.25666666666666665" />
         <entry key="..\:/WORK/AndroidProjects/SportTogether/app/src/main/res/layout/show_event_activity.xml" value="0.22" />
+        <entry key="..\:/WORK/AndroidProjects/SportTogether/app/src/main/res/layout/show_event_owner_activity.xml" value="0.18432971014492755" />
         <entry key="..\:/WORK/AndroidProjects/SportTogether/app/src/main/res/menu/bottom_nav_menu.xml" value="0.22" />
         <entry key="..\:/WORK/AndroidProjects/SportTogether/app/src/main/res/menu/menu_fragment_tasks.xml" value="0.1" />
       </map>

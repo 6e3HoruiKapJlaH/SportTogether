@@ -16,10 +16,12 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
             case 0:
                 return new AllEventsFragment();
             case 1:
-                return new AccountFragment();
+                return new MyEventsFragment();
             case 2:
                 return new AddEventFragment();
             case 3:
+                return new CreatedEventsFragment();
+            case 4:
                 return new AccountFragment();
         }
         return null;
@@ -27,7 +29,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 4;
+        return 5;
     }
 
     @Override

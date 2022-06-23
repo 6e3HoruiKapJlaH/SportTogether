@@ -31,6 +31,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.appeaser.sublimepickerlibrary.datepicker.SublimeDatePicker;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -96,8 +97,11 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.menu_add_event:
                     viewPager.setCurrentItem(2);
                     return true;
-                case R.id.menu_account:
+                case R.id.menu_created_events:
                     viewPager.setCurrentItem(3);
+                    return true;
+                case R.id.menu_account:
+                    viewPager.setCurrentItem(4);
                     return true;
             }
             return true;
@@ -119,12 +123,17 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 1:
                         bottomNavigationView.getMenu().findItem(R.id.menu_my_events).setChecked(true);
+                        showMyEvents();
                         break;
                     case 2:
                         createEventPage();
                         break;
                     case 3:
-                        bottomNavigationView.getMenu().findItem(R.id.menu_account).setChecked(true);
+                        bottomNavigationView.getMenu().findItem(R.id.menu_created_events).setChecked(true);
+                        showCreatedEvents();
+                        break;
+                    case 4:
+                        showAccountPage();
                         break;
                 }
             }
@@ -146,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
         AutoCompleteTextView actView = findViewById(R.id.add_event_sport_list);
         actView.setAdapter(arrayAdapter);
         bottomNavigationView.getMenu().findItem(R.id.menu_add_event).setChecked(true);
+
 
 
         //MAP
@@ -177,7 +187,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==777){
-            this.location = (Location) data.getSerializableExtra("location");
+            if(resultCode==RESULT_OK){
+                this.location = (Location) data.getSerializableExtra("location");
+            }
         }
     }
 
@@ -210,7 +222,6 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<ArrayList<Event>> call, @NonNull Response<ArrayList<Event>> response) {
                 if(response.code()==200){
                     ArrayList<Event> events = response.body();
-                    System.out.println(events);
                     ListView allEventsList = (ListView) findViewById(R.id.all_events_list);
                     AllEventsAdapter adapter= new AllEventsAdapter(events,getApplicationContext());
                     allEventsList.setAdapter(adapter);
@@ -220,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
                             Event event = events.get(i);
                             Intent intent = new Intent(MainActivity.this, ShowEventActivity.class);
                             intent.putExtra("event", event);
-                            MainActivity.this.startActivityForResult(intent,777);
+                            startActivity(intent);
                         }
                     });
                 }
@@ -232,6 +243,99 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<ArrayList<Event>> call, @NonNull Throwable t) {
                 System.out.println("ERROR "+t.getMessage());
+            }
+        });
+    }
+
+    public void showMyEvents(){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BuildConfig.API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        RetrofitAPI retrofitAPI = retrofit.create(RetrofitAPI.class);
+        Call<ArrayList<Event>> call = retrofitAPI.getMyEvents(user);
+        call.enqueue(new Callback<ArrayList<Event>>() {
+            @Override
+            public void onResponse(@NonNull Call<ArrayList<Event>> call, @NonNull Response<ArrayList<Event>> response) {
+                if(response.code()==200){
+                    ArrayList<Event> events = response.body();
+                    ListView allEventsList = (ListView) findViewById(R.id.my_events_list);
+                    AllEventsAdapter adapter= new AllEventsAdapter(events,getApplicationContext());
+                    allEventsList.setAdapter(adapter);
+                    allEventsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            Event event = events.get(i);
+                            Intent intent = new Intent(MainActivity.this, ShowEventActivity.class);
+                            intent.putExtra("event", event);
+                            startActivity(intent);
+                        }
+                    });
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "Помилка завантаження подій", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ArrayList<Event>> call, @NonNull Throwable t) {
+                System.out.println("ERROR "+t.getMessage());
+            }
+        });
+    }
+
+    public void showCreatedEvents(){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BuildConfig.API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        RetrofitAPI retrofitAPI = retrofit.create(RetrofitAPI.class);
+        Call<ArrayList<Event>> call = retrofitAPI.getCreatedEvents(user);
+        call.enqueue(new Callback<ArrayList<Event>>() {
+            @Override
+            public void onResponse(@NonNull Call<ArrayList<Event>> call, @NonNull Response<ArrayList<Event>> response) {
+                if(response.code()==200){
+                    ArrayList<Event> events = response.body();
+                    ListView allEventsList = (ListView) findViewById(R.id.created_events_list);
+                    AllEventsAdapter adapter= new AllEventsAdapter(events,getApplicationContext());
+                    allEventsList.setAdapter(adapter);
+                    allEventsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            Event event = events.get(i);
+                            Intent intent = new Intent(MainActivity.this, ShowCreatedEventActivity.class);
+                            intent.putExtra("event", event);
+                            startActivity(intent);
+                        }
+                    });
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "Помилка завантаження подій", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ArrayList<Event>> call, @NonNull Throwable t) {
+                System.out.println("ERROR "+t.getMessage());
+            }
+        });
+    }
+
+    private void showAccountPage(){
+        bottomNavigationView.getMenu().findItem(R.id.menu_account).setChecked(true);
+        TextView username = findViewById(R.id.account_name);
+        TextView email = findViewById(R.id.account_email);
+        Button signout = findViewById(R.id.signout);
+        username.setText(user.getName());
+        email.setText(user.getEmail());
+
+        signout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences sh = getSharedPreferences("MySharedPref", MODE_PRIVATE);
+                @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = sh.edit();
+                editor.clear().apply();
+                finish();
             }
         });
     }

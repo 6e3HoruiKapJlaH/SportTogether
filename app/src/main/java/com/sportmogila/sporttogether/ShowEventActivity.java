@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -24,10 +25,21 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.gson.Gson;
+import com.mapbox.geojson.Point;
+import com.mapbox.maps.CameraBounds;
+import com.mapbox.maps.CameraOptions;
+import com.mapbox.maps.MapView;
+import com.mapbox.maps.MapboxMap;
+import com.mapbox.maps.Style;
+import com.mapbox.maps.extension.observable.eventdata.MapLoadedEventData;
+import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadedListener;
 import com.sportmogila.sporttogether.models.Event;
 import com.sportmogila.sporttogether.models.User;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -62,6 +74,24 @@ public class ShowEventActivity extends AppCompatActivity {
         image = findViewById(R.id.show_event_image);
         eventName.setText(event.getName());
         eventDescription.setText(event.getDescription());
+
+        MapView mapView = findViewById(R.id.show_event_map);
+        MapboxMap mapBoxMap = mapView.getMapboxMap();
+        mapBoxMap.loadStyleUri(Style.MAPBOX_STREETS, new Style.OnStyleLoaded() {
+            @Override
+            public void onStyleLoaded(@NonNull Style style) {
+
+            }
+        });
+        mapBoxMap.addOnMapLoadedListener(new OnMapLoadedListener() {
+            @Override
+            public void onMapLoaded(@NonNull MapLoadedEventData mapLoadedEventData) {
+                Double x = event.getLocation().getMapX();
+                Double y = event.getLocation().getMapY();
+                Point point = Point.fromLngLat(y,x);
+                mapBoxMap.setCamera(new CameraOptions.Builder().center(point).build());
+            }
+        });
         switch (event.getSport()){
             case "⚽ Футбол":
                 image.setImageResource(R.drawable.sport_football);
@@ -82,7 +112,9 @@ public class ShowEventActivity extends AppCompatActivity {
         button = findViewById(R.id.show_event_button);
 
         ArrayList<User> members = event.getMembers();
-
+        Collections.reverse(members);
+        members.add(event.getOwner());
+        Collections.reverse(members);
         ListView membersList = findViewById(R.id.show_event_members_list);
         EventMembersAdapter adapter= new EventMembersAdapter(members,getApplicationContext());
         membersList.setAdapter(adapter);
@@ -164,4 +196,6 @@ public class ShowEventActivity extends AppCompatActivity {
         }
         btnType = type;
     }
+
+
 }

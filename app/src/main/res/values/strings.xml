@@ -16,4 +16,5 @@
     </string-array>
 
     <string name="mapbox_access_token">pk.eyJ1IjoidGhldml0aWsiLCJhIjoiY2w0cTY4ODIxMGgyZzNrczI5dWVzMGp0byJ9.oJD-i1X7uB6f37VJtj9oNg</string>
+    <string name="menu_created_events">Створені події</string>
 </resources>
